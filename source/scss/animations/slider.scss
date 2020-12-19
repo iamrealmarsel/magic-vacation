@@ -1,0 +1,17 @@
+.slider__item-text {
+  opacity: 0;
+  transform: translateX(10%);
+  transition: all .5s ease-out .5s;
+  transition-property: opacity, transform;
+
+  .swiper-slide-active & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .swiper-slide-next & {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 1s;
+  }
+}

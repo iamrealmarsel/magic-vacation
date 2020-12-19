@@ -1,0 +1,7 @@
+.page-header__menu a {
+  transition: color .35s ease;
+
+  &::after {
+    transition: background-color .35s ease, width .35s ease;
+  }
+}

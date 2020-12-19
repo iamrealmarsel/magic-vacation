@@ -17,6 +17,7 @@
   height: 4rem;
   color: $c-dark;
   border-radius: 50%;
+  transition: color .35s;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     display: none;
@@ -35,6 +36,7 @@
     background-color: $c-light;
     border: 2px solid $c-light;
     z-index: -1;
+    transition: width .35s, height .35s;
   }
 
   svg {
@@ -65,6 +67,11 @@
     & + .social-block__list {
       opacity: 1;
       pointer-events: auto;
+
+      .social-block__link {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   }
 
@@ -168,6 +175,14 @@
   color: $c-light;
   border: 2px solid transparent;
   border-radius: 50%;
+  opacity: 0;
+  transform: translateY(30%);
+  transition: all .35s;
+
+  .social-block:hover & {
+    transform: translateY(0);
+    opacity: 1;
+  }
 
   @media (min-width: $stop-scaling) {
     width: 40px;
@@ -219,6 +234,7 @@
   }
 
   &--insta {
+    transition-delay: .1s;
     svg {
       width: 1.5rem;
       height: 1.5rem;
@@ -231,6 +247,7 @@
   }
 
   &--vk {
+    transition-delay: .2s;
     svg {
       width: 1.7rem;
       height: 1rem;
