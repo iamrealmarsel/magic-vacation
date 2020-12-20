@@ -35,6 +35,8 @@ export default class FullPageScroll {
   }
 
   changePageDisplay() {
+    // this.changeVisibilityDisplay();
+
     let baсkgroundFillElement = document.querySelector(`.baсkground-fill`);
     if (this.screenElements[this.activeScreen].classList.contains(`screen--prizes`)) {
       baсkgroundFillElement.classList.add(`active`);
