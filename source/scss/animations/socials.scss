@@ -1,0 +1,8 @@
+.social-block__toggler {
+  transition: transform .35s cubic-bezier(.42,.89,.53,.91) .5s;
+  transform: scale(0);
+
+  .loaded & {
+    transform: scale(1);
+  }
+}

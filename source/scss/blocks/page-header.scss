@@ -274,6 +274,8 @@
       &::after {
         display: block;
         width: 100%;
+        left: 0;
+        right: auto;
       }
     }
 

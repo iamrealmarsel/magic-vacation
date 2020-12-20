@@ -354,3 +354,18 @@
 .screen--rules {
   background-color: $c-dark;
 }
+
+.baсkground-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #5f458c;
+  z-index: 1;
+
+  &.active {
+    height: 100%;
+    transition: height .5s ease;
+  }
+}

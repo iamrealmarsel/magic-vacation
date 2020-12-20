@@ -35,7 +35,17 @@ export default class FullPageScroll {
   }
 
   changePageDisplay() {
-    this.changeVisibilityDisplay();
+    let baсkgroundFillElement = document.querySelector(`.baсkground-fill`);
+    if (this.screenElements[this.activeScreen].classList.contains(`screen--prizes`)) {
+      baсkgroundFillElement.classList.add(`active`);
+      setTimeout(() => {
+        baсkgroundFillElement.classList.remove(`active`);
+        this.changeVisibilityDisplay();
+      }, 500);
+    } else {
+      this.changeVisibilityDisplay();
+    }
+
     this.changeActiveMenuItem();
     this.emitChangeDisplayEvent();
   }
@@ -45,9 +55,8 @@ export default class FullPageScroll {
       screen.classList.add(`screen--hidden`);
       screen.classList.remove(`active`);
     });
-    this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
-    // this.screenElements[this.activeScreen].classList.add(`active`);
 
+    this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
     setTimeout(() => {
       this.screenElements[this.activeScreen].classList.add(`active`);
     }, 100);

@@ -4,4 +4,32 @@
   &::after {
     transition: background-color .35s ease, width .35s ease;
   }
+
+  &.active::after {
+    transition: background-color .35s ease, width .35s cubic-bezier(.42,.89,.53,.91) .5s;
+  }
+}
+
+.page-header__logo {
+  opacity: 0;
+  transform: translateX(-4rem);
+  transition: all .35s cubic-bezier(.42,.89,.53,.91);
+  transition-property: transform, opacity;
+
+  .loaded & {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.page-header__nav {
+  opacity: 0;
+  transform: translateY(-2.7rem);
+  transition: all .5s cubic-bezier(.42,.89,.53,.91);
+  transition-property: transform, opacity;
+
+  .loaded & {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
