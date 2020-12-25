@@ -1,0 +1,85 @@
+@keyframes fadeInRuleItems {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes showRuleText {
+  0% {
+    opacity: 0;
+    transform: translateX(30%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rules__item {
+  &::before {
+    transform: scale(0);
+  }
+
+  .screen.active & {
+    &::before {
+      animation: fadeInRuleItems .7s forwards cubic-bezier(.35,1.4,.7,1.29);
+      will-change: transform;
+    }
+    p {
+      animation: showRuleText .7s forwards ease;
+      will-change: opacity, transform;
+    }
+  }
+
+  .screen.active &:nth-child(2) {
+    &::before {
+      animation-delay: .3s;
+    }
+    p {
+      animation-delay: .3s;
+    }
+  }
+
+  .screen.active &:nth-child(3) {
+    &::before {
+      animation-delay: .6s;
+    }
+    p {
+      animation-delay: .6s;
+    }
+  }
+
+  .screen.active &:nth-child(4) {
+    &::before {
+      animation-delay: .9s;
+    }
+    p {
+      animation-delay: .9s;
+    }
+  }
+}
+
+.rules__link {
+  transform: scaleX(0);
+  transform-origin: 100% 50% 0;
+  transition: transform .5s ease 1.2s;
+
+  & span {
+    opacity: 0;
+    transition: opacity .5s ease 1.4s;
+  }
+
+  .screen.active & {
+    transform: scale(1);
+
+    span {
+      opacity: 1;
+    }
+  }
+}
+
+
+
