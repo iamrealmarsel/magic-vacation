@@ -43,7 +43,7 @@ export default class FullPageScroll {
       setTimeout(() => {
         baсkgroundFillElement.classList.remove(`active`);
         this.changeVisibilityDisplay();
-      }, 500);
+      }, 1000);
     } else {
       this.changeVisibilityDisplay();
     }

@@ -1,0 +1,15 @@
+.animate-title {
+  .word {
+    display: flex;
+    overflow-y: hidden;
+    padding-top: 12px;
+  }
+
+  .letter {
+    transform: translate3d(0, 110%, 0);
+
+    .screen.active & {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}

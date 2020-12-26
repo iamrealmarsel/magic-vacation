@@ -30,7 +30,7 @@
   font-family: $font-alt;
   font-weight: 400;
   font-size: 12rem;
-  line-height: 0.906;
+  line-height: 1;
   letter-spacing: -0.04em;
 
   @media (min-width: $stop-scaling) {
@@ -150,6 +150,7 @@
 }
 
 .intro__date {
+  display: flex;
   margin: 0 0 0 -0.5rem;
   font-family: $font-alt;
   font-weight: 400;
