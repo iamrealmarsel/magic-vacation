@@ -1,4 +1,5 @@
 import throttle from 'lodash/throttle';
+import prizes from './prizes.js';
 
 export default class FullPageScroll {
   constructor() {
@@ -35,14 +36,13 @@ export default class FullPageScroll {
   }
 
   changePageDisplay() {
-    // this.changeVisibilityDisplay();
-
     let baсkgroundFillElement = document.querySelector(`.baсkground-fill`);
     if (this.screenElements[this.activeScreen].classList.contains(`screen--prizes`)) {
       baсkgroundFillElement.classList.add(`active`);
       setTimeout(() => {
         baсkgroundFillElement.classList.remove(`active`);
         this.changeVisibilityDisplay();
+        prizes();
       }, 1000);
     } else {
       this.changeVisibilityDisplay();
@@ -59,10 +59,10 @@ export default class FullPageScroll {
     });
 
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
-    this.screenElements[this.activeScreen].classList.add(`active`);
-    // setTimeout(() => {
     // this.screenElements[this.activeScreen].classList.add(`active`);
-    // }, 100);
+    setTimeout(() => {
+      this.screenElements[this.activeScreen].classList.add(`active`);
+    }, 100);
   }
 
   changeActiveMenuItem() {

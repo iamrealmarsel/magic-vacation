@@ -1,6 +1,6 @@
-export default () => {
-  const prizesScreen = document.querySelector(`.screen--prizes`);
+let animationShown = false;
 
+export default () => {
   const primaryAwardImg = document.querySelector(`.prizes__item-primary-svg`);
   const primaryAwardSvgPath = `img/primary.svg`;
 
@@ -10,29 +10,17 @@ export default () => {
   const additionalAwardImg = document.querySelector(`.prizes__item-additional-svg`);
   const additionalAwardSvgPath = `img/additional.svg`;
 
-  let animationShown = false;
+  if (!animationShown) {
+    primaryAwardImg.src = `${primaryAwardSvgPath}`;
 
-  document.body.addEventListener(`screenChanged`, () => {
-    const prizesScreenActive = prizesScreen.classList.contains(`active`);
-    console.log(prizesScreenActive, animationShown);
+    setTimeout(() => {
+      secondaryAwardImg.src = `${secondaryAwardSvgPath}`;
+    }, 3800);
 
-    if (prizesScreenActive && !animationShown) {
-      console.log(`hi`);
+    setTimeout(() => {
+      additionalAwardImg.src = `${additionalAwardSvgPath}`;
+    }, 6600);
 
-      primaryAwardImg.src = `${primaryAwardSvgPath}?${Math.random()}`;
-
-
-      setTimeout(() => {
-        secondaryAwardImg.src = `${secondaryAwardSvgPath}?${Math.random()}`;
-      }, 3900);
-
-
-      setTimeout(() => {
-        additionalAwardImg.src = `${additionalAwardSvgPath}?${Math.random()}`;
-      }, 5900);
-
-      animationShown = true;
-    }
-  });
-
+    animationShown = true;
+  }
 };
