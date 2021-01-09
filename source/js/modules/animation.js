@@ -1,4 +1,6 @@
-const animateTitle = (selector, property, timer, maxDelay) => {
+import {randomInt} from './utils.js';
+
+export const animateTitle = (selector, property, timer, maxDelay) => {
   const createSpanElement = (content) => {
     const timeDelay = randomInt(maxDelay);
     const span = document.createElement(`span`);
@@ -29,10 +31,29 @@ const animateTitle = (selector, property, timer, maxDelay) => {
   targetElement.append(...spanText);
 };
 
-const randomInt = (upper) => {
-  const lower = 0;
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
+export const animate = (durationSeconds, fps, draw) => {
+  const duration = durationSeconds * 1000;
+  const frameInterval = 1000 / fps;
+  const start = Date.now();
+  let startFrame = start;
+  let progress = 0;
+
+  requestAnimationFrame(function cb() {
+    let endFrame = Date.now();
+    let elapsed = endFrame - startFrame;
+
+    if (elapsed > frameInterval) {
+      let extra = elapsed % frameInterval;
+      startFrame = endFrame - extra;
+      progress = (endFrame - start) / duration;
+      if (progress > 1) {
+        progress = 1;
+      }
+      draw(progress);
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(cb);
+    }
+  });
 };
-
-
-export {animateTitle};
