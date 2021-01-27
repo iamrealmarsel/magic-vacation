@@ -1,4 +1,4 @@
-import {randomInt} from './utils.js';
+import {randomInt} from '../helpers/utils.js';
 
 export const animateTitle = (selector, property, timer, maxDelay) => {
   const createSpanElement = (content) => {

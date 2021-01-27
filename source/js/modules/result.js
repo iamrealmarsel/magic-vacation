@@ -1,3 +1,7 @@
+import winResult1 from './win-result-1';
+
+winResult1();
+
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
   let results = document.querySelectorAll(`.screen--result`);
