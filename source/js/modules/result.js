@@ -1,6 +1,8 @@
 import winResult1 from './win-result-1';
+import loseResult from './lose-result';
 
 winResult1();
+loseResult();
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);

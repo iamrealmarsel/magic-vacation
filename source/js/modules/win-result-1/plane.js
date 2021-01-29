@@ -165,7 +165,7 @@ function drawBack() {
 
 export function drawStaticTree() {
   ctx.save();
-  ctx.fillStyle = `rgb(92, 66, 137)`;
+  ctx.fillStyle = `#5f458c`;
   ctx.beginPath();
   ctx.moveTo(staticTreeTopPoint.x, staticTreeTopPoint.y);
   ctx.lineTo(staticTreeTopPoint.x + 40, staticTreeTopPoint.y + 200);
@@ -176,7 +176,7 @@ export function drawStaticTree() {
 
 export function drawDynamicTree() {
   ctx.save();
-  ctx.fillStyle = `rgb(92, 66, 137)`;
+  ctx.fillStyle = `#5f458c`;
   ctx.beginPath();
   ctx.moveTo(dynamicTreeTopPoint.x, dynamicTreeTopPoint.y);
   ctx.lineTo(dynamicTreeTopPoint.x + 50, dynamicTreeTopPoint.y + 300);

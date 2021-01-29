@@ -16,6 +16,25 @@ export function animateProgress(render, duration, easing = linear) {
   });
 }
 
+export function animateProgressDelay(render, duration, delay, easing = linear) {
+  return new Promise((resolve) => {
+    const callback = () => {
+      const start = Date.now();
+      (function loop() {
+        const p = (Date.now() - start) / duration;
+        if (p >= 1) {
+          render(1);
+          resolve();
+        } else {
+          render(easing(p));
+          requestAnimationFrame(loop);
+        }
+      }());
+    };
+    setTimeout(callback, delay);
+  });
+}
+
 export function animateInfiniteReverseProgress(render, duration, easing = linear) {
   let start = Date.now();
   let reverse = false;
@@ -97,3 +116,12 @@ export function animateInfinite(render) {
     requestAnimationFrame(loop);
   })();
 }
+
+export function animateWithAutoCompletion(render) {
+  (function loop() {
+    if (!render()) {
+      requestAnimationFrame(loop);
+    }
+  })();
+}
+
