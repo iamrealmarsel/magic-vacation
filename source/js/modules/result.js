@@ -1,8 +1,16 @@
 import winResult1 from './win-result-1';
 import loseResult from './lose-result';
 
-winResult1();
-loseResult();
+const animation = {
+  result: winResult1,
+  result3: loseResult,
+};
+
+const animateCanvas = (target) => {
+  if (animation[target]) {
+    animation[target]();
+  }
+};
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -20,6 +28,7 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+        animateCanvas(target);
       });
     }
 

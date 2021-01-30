@@ -56,7 +56,5 @@ async function animateLoseResult() {
   });
 }
 
-animateLoseResult();
 
-
-export default () => {};
+export default () => animateLoseResult();
