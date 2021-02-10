@@ -13,7 +13,7 @@ import body from './modules/body.js';
 import game from './modules/game.js';
 import {animateTitle} from './modules/animation.js';
 import FullPageScroll from './modules/full-page-scroll';
-import bgIntro from './modules/scenes/intro';
+import bgIntro from './modules/webgl/intro';
 
 // init modules
 mobileHeight();

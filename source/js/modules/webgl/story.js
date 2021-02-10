@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import vertexStory from './vertexStory.glsl';
+import fragmentStory from './fragmentStory.glsl';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -16,74 +18,79 @@ const renderer = new THREE.WebGLRenderer({canvas: canvasStory});
 const textures = [
   {
     texture: loader.load(`/img/scene-1.png`),
+    options: {hueShift: 0.0, distort: false}
   },
   {
     texture: loader.load(`/img/scene-2.png`),
-    hueCoeff: -0.4,
+    options: {hueShift: -0.5, distort: true}
   },
   {
     texture: loader.load(`/img/scene-3.png`),
+    options: {hueShift: 0.0, distort: false}
   },
   {
     texture: loader.load(`/img/scene-4.png`),
+    options: {hueShift: 0.0, distort: false}
   },
 ];
+
+// const bubblesDuration = 5000;
+
+const bubbles = [
+  {
+    radius: 100.0,
+    position: [windowHalfWidth - 50, 450],
+    positionAmplitude: 50,
+  },
+  {
+    radius: 60.0,
+    position: [windowHalfWidth + 100, 300],
+    positionAmplitude: 40,
+  },
+  {
+    radius: 40.0,
+    position: [windowHalfWidth - 200, 150],
+    positionAmplitude: 30,
+  },
+];
+
+function addBubble(index) {
+  if (textures[index].options.distort) {
+    return {
+      distortion: {
+        value: {
+          bubbles,
+          resolution: [windowWidth, windowHeight],
+        }
+      },
+    };
+  }
+
+  return {};
+}
 
 let geoWidth = 2048;
 let geoHeight = 1024;
 
 export const loadStory = () => {
   manager.onLoad = () => {
-    textures.forEach(({texture, hueCoeff = 0}, index) => {
-      const material = new THREE.RawShaderMaterial({
+    textures.forEach(({texture, options}, index) => {
+
+      const configMaterial = {
         uniforms: {
           map: {
             value: texture
           },
-          hueCoeff: {
-            value: hueCoeff,
+          options: {
+            value: options,
           },
+          ...addBubble(index),
         },
+        vertexShader: vertexStory,
+        fragmentShader: fragmentStory,
+      };
 
-        vertexShader: `
-          // Переменные, которые передаёт Three.js для проецирования на плоскость
-          uniform mat4 projectionMatrix;
-          uniform mat4 modelMatrix;
-          uniform mat4 viewMatrix;
-
-          // Атрибуты вершины из геометрии
-          attribute vec3 position;
-          attribute vec3 normal;
-          attribute vec2 uv;
-
-          // Varying-переменная для передачи uv во фрагментный шейдер
-          varying vec2 vUv;
-
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
-          }
-        `,
-
-        fragmentShader: `
-          precision mediump float;
-          uniform sampler2D map;
-          uniform float hueCoeff;
-          varying vec2 vUv;
-
-          vec3 hueShift(vec3 color, float hue) {
-            const vec3 k = vec3(0.57735);
-            float cosAngle = cos(hue);
-            return vec3(color * cosAngle + cross(k, color) * sin(hue) + k * dot(k, color) * (1.0 - cosAngle));
-          }
-
-          void main() {
-            vec4 texel = texture2D( map, vUv );
-            vec3 hueTexel = hueShift(texel.xyz, hueCoeff);
-            gl_FragColor = vec4(hueTexel, 1);
-          }
-        `,
-      });
+      const material = new THREE.RawShaderMaterial(configMaterial);
 
       const aspectCanvas = windowWidth / windowHeight;
       const aspectImage = geoWidth / geoHeight;

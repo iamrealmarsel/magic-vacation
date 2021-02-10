@@ -1,5 +1,5 @@
 import Swiper from "swiper";
-import {loadStory, moveCameraX} from './scenes/story';
+import {loadStory, moveCameraX} from './webgl/story';
 
 export default () => {
   loadStory();
