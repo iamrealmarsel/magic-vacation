@@ -14,10 +14,19 @@ const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({canvas: canvasStory});
 
 const textures = [
-  loader.load(`/img/scene-1.png`),
-  loader.load(`/img/scene-2.png`),
-  loader.load(`/img/scene-3.png`),
-  loader.load(`/img/scene-4.png`),
+  {
+    texture: loader.load(`/img/scene-1.png`),
+  },
+  {
+    texture: loader.load(`/img/scene-2.png`),
+    hueCoeff: -0.4,
+  },
+  {
+    texture: loader.load(`/img/scene-3.png`),
+  },
+  {
+    texture: loader.load(`/img/scene-4.png`),
+  },
 ];
 
 let geoWidth = 2048;
@@ -25,12 +34,15 @@ let geoHeight = 1024;
 
 export const loadStory = () => {
   manager.onLoad = () => {
-    textures.forEach((texture, index) => {
+    textures.forEach(({texture, hueCoeff = 0}, index) => {
       const material = new THREE.RawShaderMaterial({
         uniforms: {
           map: {
             value: texture
-          }
+          },
+          hueCoeff: {
+            value: hueCoeff,
+          },
         },
 
         vertexShader: `
@@ -56,10 +68,19 @@ export const loadStory = () => {
         fragmentShader: `
           precision mediump float;
           uniform sampler2D map;
+          uniform float hueCoeff;
           varying vec2 vUv;
+
+          vec3 hueShift(vec3 color, float hue) {
+            const vec3 k = vec3(0.57735);
+            float cosAngle = cos(hue);
+            return vec3(color * cosAngle + cross(k, color) * sin(hue) + k * dot(k, color) * (1.0 - cosAngle));
+          }
+
           void main() {
             vec4 texel = texture2D( map, vUv );
-            gl_FragColor = texel;
+            vec3 hueTexel = hueShift(texel.xyz, hueCoeff);
+            gl_FragColor = vec4(hueTexel, 1);
           }
         `,
       });
