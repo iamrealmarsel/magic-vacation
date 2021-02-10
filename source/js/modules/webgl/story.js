@@ -35,22 +35,34 @@ const textures = [
 ];
 
 // const bubblesDuration = 5000;
+const bubbleGlareOffset = 0.8;
+const bubbleStartRadianAngle = 1.96;
+const bubbleEndRadianAngle = 2.75;
 
 const bubbles = [
   {
     radius: 100.0,
     position: [windowHalfWidth - 50, 450],
     positionAmplitude: 50,
+    glareOffset: bubbleGlareOffset,
+    glareAngleStart: bubbleStartRadianAngle,
+    glareAngleEnd: bubbleEndRadianAngle,
   },
   {
     radius: 60.0,
     position: [windowHalfWidth + 100, 300],
     positionAmplitude: 40,
+    glareOffset: bubbleGlareOffset,
+    glareAngleStart: bubbleStartRadianAngle,
+    glareAngleEnd: bubbleEndRadianAngle,
   },
   {
     radius: 40.0,
     position: [windowHalfWidth - 200, 150],
     positionAmplitude: 30,
+    glareOffset: bubbleGlareOffset,
+    glareAngleStart: bubbleStartRadianAngle,
+    glareAngleEnd: bubbleEndRadianAngle,
   },
 ];
 
