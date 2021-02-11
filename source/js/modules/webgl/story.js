@@ -1,12 +1,19 @@
 import * as THREE from 'three';
 import vertexStory from './vertexStory.glsl';
 import fragmentStory from './fragmentStory.glsl';
+import {animateEasingWithFPS} from '../../helpers/animate';
+import {bezierEasing} from '../../helpers/cubic-bezier';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
 const windowHalfWidth = window.innerWidth / 2;
 const windowHalfHeight = window.innerHeight / 2;
 const canvasStory = document.querySelector(`#canvasStory`);
+
+const easeInOut = bezierEasing(0.41, 0, 0.54, 1);
+const hueIntensityEasingFn = (timingFraction) => {
+  return easeInOut(Math.sin(timingFraction * Math.PI));
+};
 
 const manager = new THREE.LoadingManager();
 const loader = new THREE.TextureLoader(manager);
@@ -22,7 +29,18 @@ const textures = [
   },
   {
     texture: loader.load(`/img/scene-2.png`),
-    options: {hueShift: -0.5, distort: true}
+    options: {
+      hueShift: -0.5,
+      distort: true
+    },
+    animations: {
+      hue: {
+        initial: -0.1,
+        final: -0.5,
+        duration: 3000,
+        variation: 0.4,
+      },
+    }
   },
   {
     texture: loader.load(`/img/scene-3.png`),
@@ -34,7 +52,6 @@ const textures = [
   },
 ];
 
-// const bubblesDuration = 5000;
 const bubbleGlareOffset = 0.8;
 const bubbleStartRadianAngle = 1.96;
 const bubbleEndRadianAngle = 2.75;
@@ -152,5 +169,26 @@ export const loadStory = () => {
 export const moveCameraX = (activeIndex) => {
   camera.position.x = geoWidth * activeIndex;
   renderer.render(scene, camera);
+
+  if (textures[activeIndex].animations) {
+    animateHueShift(activeIndex);
+  }
 };
+
+
+function animateHueShift(activeIndex) {
+  const {initial, final, duration, variation} = textures[activeIndex].animations.hue;
+  const offset = (Math.random() * variation * 2 + (1 - variation));
+  animateEasingWithFPS(hueShiftIntensityAnimationTick(activeIndex, initial, final * offset), duration * offset, hueIntensityEasingFn)
+  .then(() => animateHueShift(activeIndex));
+}
+
+function hueShiftIntensityAnimationTick(index, from, to) {
+  return (progress) => {
+    const hueShift = from + progress * (to - from);
+    textures[index].options.hueShift = hueShift;
+    renderer.setSize(windowWidth, windowHeight);
+    renderer.render(scene, camera);
+  };
+}
 
