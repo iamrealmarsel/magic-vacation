@@ -18,9 +18,75 @@ const hueIntensityEasingFn = (timingFraction) => {
 const manager = new THREE.LoadingManager();
 const loader = new THREE.TextureLoader(manager);
 
-const camera = new THREE.OrthographicCamera(-windowHalfWidth, windowHalfWidth, windowHalfHeight, -windowHalfHeight, 0, 1);
+const sceneParams = {
+  fov: 35,
+  aspect: windowWidth / windowHeight,
+  near: 0.1,
+  far: 1000,
+  position: {
+    z: 750
+  }
+};
+
+const camera = new THREE.PerspectiveCamera(sceneParams.fov, sceneParams.aspect, sceneParams.near, sceneParams.far);
+camera.position.z = sceneParams.position.z;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({canvas: canvasStory});
+
+const geometrySphere = new THREE.SphereGeometry(100, 50, 50);
+const materialSphere = new THREE.MeshStandardMaterial({
+  color: 0xFFFFFF,
+  metalness: 0.05,
+  emissive: 0x0,
+  roughness: 0.5
+});
+const meshSphere = new THREE.Mesh(geometrySphere, materialSphere);
+
+const lights = [
+  {
+    id: `DirectionalLight`,
+    type: `DirectionalLight`,
+    color: `rgb(255,255,255)`,
+    intensity: 0.84,
+    position: {x: 0, y: sceneParams.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), z: sceneParams.position.z},
+  },
+  {
+    id: `PointLight1`,
+    type: `PointLight`,
+    color: `rgb(246,242,255)`,
+    intensity: 0.60,
+    decay: 2.0,
+    distance: 975,
+    position: {x: -785, y: -350, z: 710},
+  },
+  {
+    id: `PointLight2`,
+    type: `PointLight`,
+    color: `rgb(245,254,255)`,
+    intensity: 0.95,
+    decay: 2.0,
+    distance: 975,
+    position: {x: 730, y: 800, z: 985},
+  },
+];
+
+function getLight() {
+  const lightGroup = new THREE.Group();
+
+  lights.forEach((light) => {
+    const color = new THREE.Color(light.color);
+
+    const lightUnit = new THREE[light.type](color, light.intensity, light.distance, light.decay);
+    lightUnit.position.set(...Object.values(light.position));
+    lightGroup.add(lightUnit);
+  });
+
+  return lightGroup;
+}
+
+const light = getLight();
+light.position.z = camera.position.z;
+
 
 const textures = [
   {
@@ -30,7 +96,7 @@ const textures = [
   {
     texture: loader.load(`/img/scene-2.png`),
     options: {
-      hueShift: -0.5,
+      hueShift: -0.3,
       distort: true
     },
     animations: {
@@ -179,6 +245,8 @@ export const loadStory = () => {
       slide.position.set(geoWidth * index, 0, 0);
 
       scene.add(slide);
+      scene.add(meshSphere);
+      scene.add(light);
     });
 
     renderer.setSize(windowWidth, windowHeight);
