@@ -3,6 +3,8 @@ import vertexStory from './vertexStory.glsl';
 import fragmentStory from './fragmentStory.glsl';
 import {animateEasingWithFPS} from '../../helpers/animate';
 import {bezierEasing} from '../../helpers/cubic-bezier';
+import StoryPyramid from './obj/group-story-pyramid';
+import StorySnowman from './obj/group-story-snowman';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -70,25 +72,11 @@ const lights = [
   },
 ];
 
-function getLight() {
-  const lightGroup = new THREE.Group();
-
-  lights.forEach((light) => {
-    const color = new THREE.Color(light.color);
-
-    const lightUnit = new THREE[light.type](color, light.intensity, light.distance, light.decay);
-    lightUnit.position.set(...Object.values(light.position));
-    lightGroup.add(lightUnit);
-  });
-
-  return lightGroup;
-}
-
 const light = getLight();
 light.position.z = camera.position.z;
 
 
-const textures = [
+const slides = [
   {
     texture: loader.load(`/img/scene-1.png`),
     options: {hueShift: 0.0, distort: false}
@@ -102,15 +90,17 @@ const textures = [
     animations: {
       hue: {
         initial: -0.1,
-        final: -0.5,
+        final: -0.3,
         duration: 3000,
         variation: 0.4,
       },
-    }
+    },
+    models: new StoryPyramid(),
   },
   {
     texture: loader.load(`/img/scene-3.png`),
-    options: {hueShift: 0.0, distort: false}
+    options: {hueShift: 0.0, distort: false},
+    models: new StorySnowman(),
   },
   {
     texture: loader.load(`/img/scene-4.png`),
@@ -159,21 +149,6 @@ const bubbles = [
   },
 ];
 
-function addBubble(index) {
-  if (textures[index].options.distort) {
-    return {
-      distortion: {
-        value: {
-          bubbles,
-          resolution: [windowWidth, windowHeight],
-        }
-      },
-    };
-  }
-
-  return {};
-}
-
 let geoWidth = 2048;
 let geoHeight = 1024;
 let configMaterial = {};
@@ -182,11 +157,9 @@ let time = {
   value: bubblesValue,
 };
 
-export const loadStory = () => {
-
+function loadStory() {
   manager.onLoad = () => {
-
-    textures.forEach(({texture, options}, index) => {
+    slides.forEach(({texture, options, models}, index) => {
 
       configMaterial = {
         uniforms: {
@@ -247,22 +220,27 @@ export const loadStory = () => {
       scene.add(slide);
       scene.add(meshSphere);
       scene.add(light);
+
+      if (models) {
+        models.position.x = geoWidth * index;
+        scene.add(models);
+      }
     });
 
     renderer.setSize(windowWidth, windowHeight);
     renderer.render(scene, camera);
   };
-};
+}
 
-export const moveCameraX = (activeIndex) => {
+function moveCameraX(activeIndex) {
   camera.position.x = geoWidth * activeIndex;
   renderer.render(scene, camera);
 
-  if (textures[activeIndex].animations) {
+  if (slides[activeIndex].animations) {
     animateHueShift(activeIndex);
     animateBubbles();
   }
-};
+}
 
 function animateBubbles() {
   if (configMaterial.uniforms.time.value < bubbleDuration / 1000) {
@@ -272,18 +250,49 @@ function animateBubbles() {
 }
 
 function animateHueShift(activeIndex) {
-  const {initial, final, duration, variation} = textures[activeIndex].animations.hue;
+  const {initial, final, duration, variation} = slides[activeIndex].animations.hue;
   const offset = (Math.random() * variation * 2 + (1 - variation));
-  animateEasingWithFPS(hueShiftIntensityAnimationTick(activeIndex, initial, final * offset), duration * offset, hueIntensityEasingFn)
+  animateEasingWithFPS(hueShiftIntensityAnimationTick(activeIndex, initial, final * offset), duration, hueIntensityEasingFn)
   .then(() => animateHueShift(activeIndex));
 }
 
 function hueShiftIntensityAnimationTick(index, from, to) {
   return (progress) => {
     const hueShift = from + progress * (to - from);
-    textures[index].options.hueShift = hueShift;
+    slides[index].options.hueShift = hueShift;
     renderer.setSize(windowWidth, windowHeight);
     renderer.render(scene, camera);
   };
 }
 
+function getLight() {
+  const lightGroup = new THREE.Group();
+
+  lights.forEach((lightItem) => {
+    const color = new THREE.Color(lightItem.color);
+
+    const lightUnit = new THREE[lightItem.type](color, lightItem.intensity, lightItem.distance, lightItem.decay);
+    lightUnit.position.set(...Object.values(lightItem.position));
+    lightGroup.add(lightUnit);
+  });
+
+  return lightGroup;
+}
+
+function addBubble(index) {
+  if (slides[index].options.distort) {
+    return {
+      distortion: {
+        value: {
+          bubbles,
+          resolution: [windowWidth, windowHeight],
+        }
+      },
+    };
+  }
+
+  return {};
+}
+
+
+export {loadStory, moveCameraX};
