@@ -5,6 +5,7 @@ import {animateEasingWithFPS} from '../../helpers/animate';
 import {bezierEasing} from '../../helpers/cubic-bezier';
 import StoryPyramid from './obj/group-story-pyramid';
 import StorySnowman from './obj/group-story-snowman';
+import StoryDog from './obj/group-story-dog';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -17,9 +18,6 @@ const hueIntensityEasingFn = (timingFraction) => {
   return easeInOut(Math.sin(timingFraction * Math.PI));
 };
 
-const manager = new THREE.LoadingManager();
-const loader = new THREE.TextureLoader(manager);
-
 const sceneParams = {
   fov: 35,
   aspect: windowWidth / windowHeight,
@@ -30,19 +28,22 @@ const sceneParams = {
   }
 };
 
+const manager = new THREE.LoadingManager();
+const loader = new THREE.TextureLoader(manager);
+
 const camera = new THREE.PerspectiveCamera(sceneParams.fov, sceneParams.aspect, sceneParams.near, sceneParams.far);
 camera.position.z = sceneParams.position.z;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({canvas: canvasStory});
 
-const geometrySphere = new THREE.SphereGeometry(100, 50, 50);
-const materialSphere = new THREE.MeshStandardMaterial({
-  color: 0xFFFFFF,
-  metalness: 0.05,
-  emissive: 0x0,
-  roughness: 0.5
-});
-const meshSphere = new THREE.Mesh(geometrySphere, materialSphere);
+// const geometrySphere = new THREE.SphereGeometry(100, 50, 50);
+// const materialSphere = new THREE.MeshStandardMaterial({
+//   color: 0xFFFFFF,
+//   metalness: 0.05,
+//   emissive: 0x0,
+//   roughness: 0.5
+// });
+// const meshSphere = new THREE.Mesh(geometrySphere, materialSphere);
 
 const lights = [
   {
@@ -79,7 +80,8 @@ light.position.z = camera.position.z;
 const slides = [
   {
     texture: loader.load(`/img/scene-1.png`),
-    options: {hueShift: 0.0, distort: false}
+    options: {hueShift: 0.0, distort: false},
+    models: new StoryDog(),
   },
   {
     texture: loader.load(`/img/scene-2.png`),
@@ -218,7 +220,7 @@ function loadStory() {
       slide.position.set(geoWidth * index, 0, 0);
 
       scene.add(slide);
-      scene.add(meshSphere);
+      // scene.add(meshSphere);
       scene.add(light);
 
       if (models) {
