@@ -273,7 +273,7 @@ function getLight() {
     lightGroup.add(lightUnit);
   });
 
-  const ambientLight = new THREE.AmbientLight(0x505050);
+  const ambientLight = new THREE.AmbientLight(0x404040);
   lightGroup.add(ambientLight);
 
   return lightGroup;

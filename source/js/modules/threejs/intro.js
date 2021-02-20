@@ -129,7 +129,7 @@ function getLightGroup() {
     lightGroup.add(lightUnit);
   });
 
-  const ambientLight = new THREE.AmbientLight(0x909090);
+  const ambientLight = new THREE.AmbientLight(0x202020);
   lightGroup.add(ambientLight);
 
   return lightGroup;
