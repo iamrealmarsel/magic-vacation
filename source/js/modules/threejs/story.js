@@ -36,15 +36,6 @@ camera.position.z = sceneParams.position.z;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({canvas: canvasStory});
 
-// const geometrySphere = new THREE.SphereGeometry(100, 50, 50);
-// const materialSphere = new THREE.MeshStandardMaterial({
-//   color: 0xFFFFFF,
-//   metalness: 0.05,
-//   emissive: 0x0,
-//   roughness: 0.5
-// });
-// const meshSphere = new THREE.Mesh(geometrySphere, materialSphere);
-
 const lights = [
   {
     id: `DirectionalLight`,
@@ -217,6 +208,8 @@ function loadStory() {
       const geometry = new THREE.PlaneGeometry(geoWidth, geoHeight);
 
       const slide = new THREE.Mesh(geometry, material);
+      // slide.scale.x = windowHeight * 2 / (1024 / windowHeight);
+      // slide.scale.y = windowHeight / (1024 / windowHeight);
       slide.position.set(geoWidth * index, 0, 0);
 
       scene.add(slide);

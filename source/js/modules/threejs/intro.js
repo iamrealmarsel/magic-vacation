@@ -119,7 +119,6 @@ async function loadSvgs() {
     const mesh = svgObject.getObject(params.name);
     setMeshParams(mesh, params);
     scene.add(mesh);
-    console.log(mesh);
   });
   renderer.render(scene, camera);
 }
