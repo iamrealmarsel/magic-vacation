@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {reflectivitySettings, colors} from './common';
 
 export const svgsConfig = [
   {
@@ -30,6 +31,37 @@ export const svgsConfig = [
     rotate: {x: 0, y: -20, z: -40},
   },
 ];
+
+export const objectsConfig = {
+  models: [
+    {
+      name: `airplane`,
+      type: `obj`,
+      path: `3d/obj/airplane.obj`,
+      materialReflectivity: reflectivitySettings.basic,
+      color: colors.White,
+      scale: 0.5,
+      position: {x: 70, y: 80, z: 100},
+      rotate: {x: 90, y: 140, z: -30},
+    },
+    {
+      name: `suitcase`,
+      type: `gltf`,
+      path: `3d/gltf/suitcase.gltf`,
+      scale: 0.5,
+      position: {x: -150, y: -150, z: 30},
+      rotate: {x: 25, y: -30, z: 0},
+    },
+    {
+      name: `watermelon`,
+      type: `gltf`,
+      path: `3d/gltf/watermelon.gltf`,
+      scale: 1,
+      position: {x: -250, y: 0, z: 40},
+      rotate: {x: 0, y: 0, z: 130},
+    },
+  ],
+};
 
 export const getLightsConfig = (sceneParams) => (
   [

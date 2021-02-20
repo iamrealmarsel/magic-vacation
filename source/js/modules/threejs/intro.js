@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import vertexIntro from './vertexIntro.glsl';
 import fragmentIntro from './fragmentIntro.glsl';
-import {svgsConfig, getLightsConfig} from './configIntro';
+import {svgsConfig, getLightsConfig, objectsConfig} from './configIntro';
 import {getSvgObject} from './obj/svg-loader';
+import {loadModel} from './3d/load-object-model';
+import {setMeshParams, getMaterial} from './common';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -11,25 +13,26 @@ const windowHalfHeight = window.innerHeight / 2;
 const canvasIntro = document.querySelector(`#canvasIntro`);
 
 
-const setMeshParams = (mesh, params) => {
-  if (params.position) {
-    mesh.position.set(...Object.values(params.position));
-    // console.log(1);
-  }
-  if (typeof params.scale === `number`) {
-    mesh.scale.set(params.scale, params.scale, params.scale);
-    // console.log(2);
-  }
-  if (typeof params.scale === `object`) {
-    mesh.scale.set(...Object.values(params.scale));
-    // console.log(3);
-  }
-  if (params.rotate) {
-    mesh.rotation.copy(new THREE.Euler(params.rotate.x * THREE.Math.DEG2RAD, params.rotate.y * THREE.Math.DEG2RAD, params.rotate.z * THREE.Math.DEG2RAD, params.rotationOrder || `XYZ`));
-    // console.log(4);
-  }
-};
+// const setMeshParams = (mesh, params) => {
+//   if (params.position) {
+//     mesh.position.set(...Object.values(params.position));
+//     // console.log(1);
+//   }
+//   if (typeof params.scale === `number`) {
+//     mesh.scale.set(params.scale, params.scale, params.scale);
+//     // console.log(2);
+//   }
+//   if (typeof params.scale === `object`) {
+//     mesh.scale.set(...Object.values(params.scale));
+//     // console.log(3);
+//   }
+//   if (params.rotate) {
+//     mesh.rotation.copy(new THREE.Euler(params.rotate.x * THREE.Math.DEG2RAD, params.rotate.y * THREE.Math.DEG2RAD, params.rotate.z * THREE.Math.DEG2RAD, params.rotationOrder || `XYZ`));
+//     // console.log(4);
+//   }
+// };
 
+const models = objectsConfig.models;
 
 const sceneParams = {
   fov: 45,
@@ -109,8 +112,8 @@ export default () => {
     bgIntro.position.set(0, 0, 0);
 
     loadSvgs();
-
-    scene.add(bgIntro);
+    loadModels();
+    // scene.add(bgIntro);
     scene.add(light);
 
     renderer.setSize(windowWidth, windowHeight);
@@ -135,6 +138,20 @@ function getLightGroup() {
   return lightGroup;
 }
 
+function loadModels() {
+  models.forEach((params) => {
+    const material = params.color && getMaterial({color: params.color, ...params.materialReflectivity});
+
+    loadModel(params, material, (mesh) => {
+      mesh.name = params.name;
+      mesh.scale.set(params.scale, params.scale, params.scale);
+      mesh.position.set(...Object.values(params.position));
+      mesh.rotation.copy(new THREE.Euler(params.rotate.x * THREE.Math.DEG2RAD, params.rotate.y * THREE.Math.DEG2RAD,
+          params.rotate.z * THREE.Math.DEG2RAD, params.rotationOrder || `XYZ`));
+      scene.add(mesh);
+    });
+  });
+}
 
 async function loadSvgs() {
   const svgObject = await getSvgObject();
