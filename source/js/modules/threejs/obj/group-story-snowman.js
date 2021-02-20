@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Snowman from './snowman';
 import Road from './road';
 import {setMeshParams} from '../common';
-import {thirdStoryConfig} from '../config';
+import {thirdStoryConfig} from '../configStory';
 
 class StorySnowman extends THREE.Group {
   constructor() {

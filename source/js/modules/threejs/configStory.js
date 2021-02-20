@@ -1,34 +1,5 @@
 import * as THREE from 'three';
 
-export const svgsConfig = [
-  {
-    name: `flamingo`,
-    scale: {x: 1.1, y: 1.2, z: 1.1},
-    position: {x: -300, y: 250, z: 100},
-    rotate: {x: 220, y: 140, z: 10},
-  },
-  {
-    name: `keyhole`,
-    position: {x: -1000, y: 1000, z: 0},
-  },
-  {
-    name: `snowflake`,
-    position: {x: -350, y: 0, z: 100},
-    rotate: {x: 20, y: 40, z: 0},
-  },
-  {
-    name: `question`,
-    position: {x: 150, y: -200, z: 100},
-    rotate: {x: 170, y: 30, z: -20},
-  },
-  {
-    name: `leaf-1`,
-    scale: {x: 1.1, y: 1.1, z: 1.1},
-    position: {x: 450, y: 200, z: 100},
-    rotate: {x: 270, y: 90, z: -20},
-  },
-];
-
 export const bubblesParams = {
   duration: 2100,
   glareOffset: 0.8,
@@ -77,11 +48,18 @@ export const getBubblesConfig = (centerCoords, ww, wh) => (
 export const getLightsConfig = (sceneParams) => (
   [
     {
-      id: `DirectionalLight`,
+      id: `DirectionalLight1`,
       type: `DirectionalLight`,
       color: `rgb(255,255,255)`,
       intensity: 0.84,
       position: {x: 0, y: sceneParams.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), z: sceneParams.position.z},
+    },
+    {
+      id: `DirectionalLight2`,
+      type: `DirectionalLight`,
+      color: `rgb(255,255,255)`,
+      intensity: 0.5,
+      position: {x: 0, y: 500, z: 0},
     },
     {
       id: `PointLight1`,
@@ -139,9 +117,9 @@ export const getTexturesConfig = (storyModels) => (
 
 export const firstStoryConfig = {
   flower: {
-    position: {x: -140, y: 75, z: 100},
-    rotate: {x: 190, y: -25, z: -5},
-    scale: 0.4
+    position: {x: -145, y: 85, z: 100},
+    rotate: {x: 0, y: 35, z: 8},
+    scale: 0.42
   },
   carpet: {
     scale: 0.35,
@@ -158,7 +136,7 @@ export const secondStoryConfig = {
   leaf: {
     scale: 0.85,
     position: {x: -115, y: 40, z: 30},
-    rotate: {x: 180, y: 3, z: 0}
+    rotate: {x: 0, y: 3, z: 0}
   },
   pyramid: {
     scale: {x: 1.2, y: 1, z: 1.2},
@@ -174,13 +152,31 @@ export const secondStoryConfig = {
 
 export const thirdStoryConfig = {
   snowman: {
-    scale: 0.75,
-    position: {x: -20, y: -110, z: 0},
+    scale: 0.55,
+    position: {x: -70, y: -60, z: 0},
     rotate: {x: 10, y: 40, z: 0}
   },
   road: {
     scale: 0.35,
     position: {x: -20, y: -20, z: 60},
     rotate: {x: 20, y: 45, z: 180}
+  }
+};
+
+export const fourthStoryConfig = {
+  flower: {
+    position: {x: -135, y: 85, z: 100},
+    rotate: {x: 0, y: 35, z: 8},
+    scale: 0.42
+  },
+  carpet: {
+    scale: 0.35,
+    position: {x: -20, y: -15, z: 40},
+    rotate: {x: 20, y: 45, z: 180}
+  },
+  saturn: {
+    scale: 0.5,
+    position: {x: 45, y: 120, z: 100},
+    rotate: {x: 0, y: 30, z: 0}
   }
 };

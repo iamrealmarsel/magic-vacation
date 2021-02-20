@@ -1,17 +1,15 @@
 import * as THREE from 'three';
 import {getSvgObject} from './svg-loader';
 import {setMeshParams} from '../common';
-import {firstStoryConfig} from '../configStory';
+import {fourthStoryConfig} from '../configStory';
 import Carpet from './carpet';
 import Saturn from './saturn';
 
-
-class StoryDog extends THREE.Group {
+class StoryII extends THREE.Group {
   constructor() {
     super();
 
     this.constructChildren = this.constructChildren.bind(this);
-
     this.constructChildren();
   }
 
@@ -24,21 +22,21 @@ class StoryDog extends THREE.Group {
   async addFlower() {
     const svgObject = await getSvgObject();
     const flower = svgObject.getObject(`flower`);
-    setMeshParams(flower, firstStoryConfig.flower);
+    setMeshParams(flower, fourthStoryConfig.flower);
     this.add(flower);
   }
 
   addCarpet() {
     const carpet = new Carpet();
-    setMeshParams(carpet, firstStoryConfig.carpet);
+    setMeshParams(carpet, fourthStoryConfig.carpet);
     this.add(carpet);
   }
 
   addSaturn() {
-    const saturn = new Saturn();
-    setMeshParams(saturn, firstStoryConfig.saturn);
+    const saturn = new Saturn({isDarkTheme: true});
+    setMeshParams(saturn, fourthStoryConfig.saturn);
     this.add(saturn);
   }
 }
 
-export default StoryDog;
+export default StoryII;

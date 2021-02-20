@@ -1,41 +1,17 @@
 import * as THREE from 'three';
 
+import {getMaterial} from '../common';
+import {snowmanConfig} from './config';
+
 class Snowman extends THREE.Group {
   constructor() {
     super();
 
-    this.topSphere = {
-      radius: 44,
-      segments: 20,
-      color: `#bccde6`,
-    };
+    this.config = snowmanConfig;
 
-    this.cone = {
-      radius: 18,
-      height: 75,
-      radialSegments: 20,
-      color: `#c44717`,
-    };
-
-    this.baseSphere = {
-      radius: 75,
-      segments: 20,
-      color: `#bccde6`,
-    };
-
-    this.addBase = this.addBase.bind(this);
-    this.addTop = this.addTop.bind(this);
     this.constructChildren = this.constructChildren.bind(this);
 
     this.constructChildren();
-  }
-
-  getMaterial(options = {}) {
-    const {color} = options;
-
-    return new THREE.MeshPhongMaterial({
-      color: new THREE.Color(color),
-    });
   }
 
   constructChildren() {
@@ -44,8 +20,15 @@ class Snowman extends THREE.Group {
   }
 
   addBase() {
-    const sphere = new THREE.SphereGeometry(this.baseSphere.radius, this.baseSphere.segments, this.baseSphere.segments);
-    const sphereMesh = new THREE.Mesh(sphere, this.getMaterial({color: this.baseSphere.color}));
+    const sphere = new THREE.SphereGeometry(
+        this.config.baseSphere.radius,
+        this.config.baseSphere.segments,
+        this.config.baseSphere.segments
+    );
+    const sphereMesh = new THREE.Mesh(sphere, getMaterial({
+      color: this.config.baseSphere.color,
+      ...this.config.baseSphere.reflectivitySettings
+    }));
 
     this.add(sphereMesh);
   }
@@ -53,11 +36,25 @@ class Snowman extends THREE.Group {
   addTop() {
     this.top = new THREE.Group();
 
-    const sphere = new THREE.SphereGeometry(this.topSphere.radius, this.topSphere.segments, this.topSphere.segments);
-    const sphereMesh = new THREE.Mesh(sphere, this.getMaterial({color: this.topSphere.color}));
+    const sphere = new THREE.SphereGeometry(
+        this.config.topSphere.radius,
+        this.config.topSphere.segments,
+        this.config.topSphere.segments
+    );
+    const sphereMesh = new THREE.Mesh(sphere, getMaterial({
+      color: this.config.topSphere.color,
+      ...this.config.topSphere.reflectivitySettings
+    }));
 
-    const cone = new THREE.ConeGeometry(this.cone.radius, this.cone.height, this.cone.radialSegments);
-    const coneMesh = new THREE.Mesh(cone, this.getMaterial({color: this.cone.color}));
+    const cone = new THREE.ConeGeometry(
+        this.config.cone.radius,
+        this.config.cone.height,
+        this.config.cone.radialSegments
+    );
+    const coneMesh = new THREE.Mesh(cone, getMaterial({
+      color: this.config.cone.color,
+      ...this.config.cone.reflectivitySettings
+    }));
 
     this.top.add(sphereMesh);
     this.top.add(coneMesh);

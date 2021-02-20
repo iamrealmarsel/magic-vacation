@@ -3,7 +3,7 @@ import Pyramid from './pyramid';
 import Lantern from './lantern';
 import {getSvgObject} from './svg-loader';
 import {setMeshParams} from '../common';
-import {secondStoryConfig} from '../config';
+import {secondStoryConfig} from '../configStory';
 
 
 class StoryPyramid extends THREE.Group {

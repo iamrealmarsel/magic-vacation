@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import vertexIntro from './vertexIntro.glsl';
 import fragmentIntro from './fragmentIntro.glsl';
-import {svgsConfig} from './config';
+import {svgsConfig, getLightsConfig} from './configIntro';
 import {getSvgObject} from './obj/svg-loader';
 
 const windowWidth = window.innerWidth;
@@ -41,6 +41,9 @@ const sceneParams = {
   }
 };
 
+const lights = getLightsConfig(sceneParams);
+const light = getLightGroup();
+
 const manager = new THREE.LoadingManager();
 const loader = new THREE.TextureLoader(manager);
 const texture = loader.load(`/img/scene.png`);
@@ -50,6 +53,7 @@ const camera = new THREE.PerspectiveCamera(sceneParams.fov, sceneParams.aspect, 
 camera.position.z = sceneParams.position.z;
 const renderer = new THREE.WebGLRenderer({canvas: canvasIntro});
 
+light.position.z = camera.position.z;
 
 export default () => {
   manager.onLoad = () => {
@@ -107,10 +111,29 @@ export default () => {
     loadSvgs();
 
     scene.add(bgIntro);
+    scene.add(light);
+
     renderer.setSize(windowWidth, windowHeight);
     renderer.render(scene, camera);
   };
 };
+
+function getLightGroup() {
+  const lightGroup = new THREE.Group();
+
+  lights.forEach((lightItem) => {
+    const color = new THREE.Color(lightItem.color);
+
+    const lightUnit = new THREE[lightItem.type](color, lightItem.intensity, lightItem.distance, lightItem.decay);
+    lightUnit.position.set(...Object.values(lightItem.position));
+    lightGroup.add(lightUnit);
+  });
+
+  const ambientLight = new THREE.AmbientLight(0x909090);
+  lightGroup.add(ambientLight);
+
+  return lightGroup;
+}
 
 
 async function loadSvgs() {

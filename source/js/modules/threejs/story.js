@@ -6,6 +6,7 @@ import {bezierEasing} from '../../helpers/cubic-bezier';
 import StoryPyramid from './obj/group-story-pyramid';
 import StorySnowman from './obj/group-story-snowman';
 import StoryDog from './obj/group-story-dog';
+import StoryII from './obj/group-story-ii';
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
@@ -67,7 +68,6 @@ const lights = [
 const light = getLight();
 light.position.z = camera.position.z;
 
-
 const slides = [
   {
     texture: loader.load(`/img/scene-1.png`),
@@ -97,7 +97,8 @@ const slides = [
   },
   {
     texture: loader.load(`/img/scene-4.png`),
-    options: {hueShift: 0.0, distort: false}
+    options: {hueShift: 0.0, distort: false},
+    models: new StoryII(),
   },
 ];
 
@@ -213,7 +214,6 @@ function loadStory() {
       slide.position.set(geoWidth * index, 0, 0);
 
       scene.add(slide);
-      // scene.add(meshSphere);
       scene.add(light);
 
       if (models) {
@@ -222,6 +222,8 @@ function loadStory() {
       }
     });
 
+    // renderer.setClearColor(0x5f458c, 1);
+    // renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(windowWidth, windowHeight);
     renderer.render(scene, camera);
   };
@@ -270,6 +272,9 @@ function getLight() {
     lightUnit.position.set(...Object.values(lightItem.position));
     lightGroup.add(lightUnit);
   });
+
+  const ambientLight = new THREE.AmbientLight(0x505050);
+  lightGroup.add(ambientLight);
 
   return lightGroup;
 }
