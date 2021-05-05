@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import {getLathePointsForCircle, getMaterial} from '../common';
 import {getSaturnConfig} from './config';
 
-const defaultOptions = {isDarkTheme: false};
+const defaultOptions = {isDarkTheme: false, basic: false};
 
 class Saturn extends THREE.Group {
   constructor(options = {...defaultOptions}) {
     super();
 
-    this.isDarkTheme = options.isDarkTheme;
-    this.saturn = getSaturnConfig(this.isDarkTheme);
+    this.options = options;
+    this.saturn = getSaturnConfig(this.options.isDarkTheme);
 
     this.constructChildren = this.constructChildren.bind(this);
 
@@ -19,8 +19,10 @@ class Saturn extends THREE.Group {
   constructChildren() {
     this.addPlanet();
     this.addRing();
-    this.addSphere();
-    this.addLine();
+    if (!this.options.basic) {
+      this.addSphere();
+      this.addLine();
+    }
   }
 
   addPlanet() {
